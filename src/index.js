@@ -1,7 +1,8 @@
 
-const { sleep } = require('../utils')
-
-const request = require('request')
+const { sleep } = require('../utils');
+const querystring = require('querystring');
+const request = require('request');
+const cheerio = require('cheerio');
 
 class Crawler {
   constructor() {
@@ -13,18 +14,19 @@ class Crawler {
       const parmas = {
         method: 'get',
         uri: url
-      }
+      };
 
       if (headers) {
         parmas.headers = headers
-      }
+      };
 
       request(parmas,
         function (error, res, body) {
           if (error) {
             reject(error)
-          }
-          resolve({ res, body })
+          };
+          const $ = cheerio.load(body.toString());
+          resolve({ res, body, $ });
         })
     })
   }
@@ -39,24 +41,25 @@ class Crawler {
 
       if (headers) {
         options.headers = headers
-      }
+      };
 
       if (formData) {
         options.body = querystring.stringify(formData)
-      }
+      };
 
       request(options, function (err, res, body) {
         if (error) {
           reject(error)
         }
-        resolve({ res, body })
-      });
+        const $ = cheerio.load(body.toString());
+        resolve({ res, body, $ });
+      })
     })
   }
 
   // 休眠
   sleep(time) {
-    return sleep(time)
+    return sleep(time);
   }
 
 }
