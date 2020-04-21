@@ -1,7 +1,7 @@
-
 const { sleep } = require('../utils');
 const querystring = require('querystring');
 const request = require('request');
+const jar = request.jar();
 const cheerio = require('cheerio');
 
 class Crawler {
@@ -13,7 +13,8 @@ class Crawler {
     return new Promise((resolve, reject) => {
       const parmas = {
         method: 'get',
-        uri: url
+        uri: url,
+        jar
       };
 
       if (headers) {
@@ -36,7 +37,8 @@ class Crawler {
     return new Promise((resolve, reject) => {
       const options = {
         method: "POST",
-        uri: url
+        uri: url,
+        jar
       };
 
       if (headers) {
