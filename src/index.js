@@ -47,7 +47,7 @@ class Crawler {
         options.body = querystring.stringify(formData)
       };
 
-      request(options, function (err, res, body) {
+      request(options, function (error, res, body) {
         if (error) {
           reject(error)
         }
