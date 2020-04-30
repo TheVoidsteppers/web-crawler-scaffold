@@ -1,5 +1,4 @@
 const { sleep } = require('../utils');
-const querystring = require('querystring');
 const request = require('request');
 const jar = request.jar();
 const cheerio = require('cheerio');
@@ -9,16 +8,12 @@ class Crawler {
   }
 
   // 发送 Get 请求
-  triggerGet({ url, headers }) {
+  triggerGet(query) {
     return new Promise((resolve, reject) => {
       const parmas = {
         method: 'get',
-        uri: url,
+        ...query,
         jar
-      };
-
-      if (headers) {
-        parmas.headers = headers
       };
 
       request(parmas,
@@ -33,21 +28,15 @@ class Crawler {
   }
 
   // 发送 Post 请求
-  triggerPost({ url, headers, formData }) {
+  triggerPost(parmas) {
     return new Promise((resolve, reject) => {
+
       const options = {
         method: "POST",
-        uri: url,
+        ...parmas,
         jar
       };
 
-      if (headers) {
-        options.headers = headers
-      };
-
-      if (formData) {
-        options.body = querystring.stringify(formData)
-      };
 
       request(options, function (error, res, body) {
         if (error) {
